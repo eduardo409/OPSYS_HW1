@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1. These tools (gmp, mpfr, libmpc, and ncurses) are needed for GCC and GDB installation. On rpm systems such as CentOS, you can run this command as root
 # yum install gmp-devel mpfr-devel libmpc-devel ncurses-devel 
 
@@ -26,3 +27,7 @@
 
 8. Type the following command to attach to the kernel
 # target remote unix:.sockets/gdb
+=======
+# OPSYS_HW1
+Build OS/161 and run Sys/161 • Discover important design aspects of OS/161 by examining its code base • Configure and build OS/161 kernels • Manage OS/161 using git, including creating a repository and tracking your changes • Use GDB to manipulate OS/161
+>>>>>>> c677626eaf0cb832ab698a10505f26e141ee173b
