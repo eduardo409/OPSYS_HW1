@@ -274,3 +274,23 @@ threadtest3(int nargs, char **args)
 	}
 	return 0;
 }
+// here i write the definition to test 4
+static
+void
+runtest4()
+{
+	make_computes(10);
+	kprintf("HELLO THIS IS A TEST  \n");
+	thread_join();
+	
+}
+int
+threadtest4(int nargs, char **args)
+{
+	if (nargs){
+		kprintf("running test \n");
+		runtest4();
+	}
+	kprintf("%s\n",args[0]);
+	return 0;
+}

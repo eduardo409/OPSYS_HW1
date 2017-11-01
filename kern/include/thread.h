@@ -74,6 +74,7 @@ struct thread {
 	const char *t_wchan_name;	/* Name of wait channel, if sleeping */
 	threadstate_t t_state;		/* State this thread is in */
 
+
 	/*
 	 * Thread subsystem internal fields.
 	 */
@@ -109,6 +110,15 @@ struct thread {
 	bool t_did_reserve_buffers;	/* reserve_buffers() in effect */
 
 	/* add more here as needed */
+	// MY CODE HERE------------------------------------
+	bool t_status;
+	struct wchan *t_wchan;
+	struct lock *t_lock;
+	struct thread * t_parent;
+	struct thread * t_child;
+	struct cv * t_cv;
+	// MY CODE HERE------------------------------------
+
 };
 
 /*
@@ -171,5 +181,7 @@ void schedule(void);
  */
 void thread_consider_migration(void);
 
+// here i declare my prototype
+void thread_join(void);
 
 #endif /* _THREAD_H_ */

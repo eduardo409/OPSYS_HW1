@@ -70,7 +70,27 @@ static struct cpuarray allcpus;
 static struct semaphore *cpu_startup_sem;
 
 ////////////////////////////////////////////////////////////
+/*
+the following code used the power point resorce provided
+by the professor
+Parent at the time of joining
+Acquire the lock
+In a loop
+Check if the child is complete
+Wait on the CV for the status to change
+Release the lock
+Return the status of the terminated child
+*/
 
+void
+thread_join(){
+	lock_acquire(curthread->t_lock);
+	while(curthread->t_child != NULL){
+		cv_wait(curthread->t_cv,curthread->t_lock);
+	}
+	lock_release(curthread->t_lock);
+
+}
 /*
  * Stick a magic number on the bottom end of the stack. This will
  * (sometimes) catch kernel stack overflows. Use thread_checkstack()
@@ -118,6 +138,7 @@ thread_create(const char *name)
 {
 	struct thread *thread;
 
+
 	DEBUGASSERT(name != NULL);
 
 	thread = kmalloc(sizeof(*thread));
@@ -150,6 +171,12 @@ thread_create(const char *name)
 	thread->t_did_reserve_buffers = false;
 
 	/* If you add to struct thread, be sure to initialize here */
+	thread->t_wchan = NULL;
+	thread->t_lock = NULL;
+	thread->t_parent = NULL;
+	thread->t_child = NULL;
+	thread->t_cv = NULL;
+	thread->t_status = false;
 
 	return thread;
 }
@@ -798,6 +825,15 @@ thread_exit(void)
 
 	/* Check the stack guard band. */
 	thread_checkstack(cur);
+	if(cur->t_child != NULL){
+
+		lock_acquire(cur->t_lock);
+
+		cur->t_child = NULL;
+		cv_signal(cur->t_cv,cur->t_lock);
+		lock_release(cur->t_lock);
+
+	}
 
 	/* Interrupts off on this processor */
         splhigh();
